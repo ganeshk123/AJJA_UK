@@ -1,0 +1,76 @@
+<ion-header class="ion-no-border">
+<ion-toolbar>
+<ion-buttons slot="start">
+<ion-back-button></ion-back-button>
+</ion-buttons>
+</ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="text && setting" class="ion-padding">
+
+<span *ngIf="!otp">
+<h1 align="center">{{ text.signup_title }}</h1>
+<p align="center">{{ text.signup_desc }}</p>
+<br>
+
+<form #form="ngForm" (ngSubmit)="signup(form.value)">
+
+<ion-item lines="none">
+  <ion-label position="floating">{{ text.signup_name }}</ion-label>
+  <ion-input type="text" ngModel name="name" required></ion-input>
+</ion-item>
+
+<ion-row class="brdr">
+<ion-col size="6" *ngIf="countrys">
+<ion-select placeholder="{{ text.country }}" [(ngModel)]="country" name="country" required interface="action-sheet" mode="md">
+<ion-select-option value="{{ c.code }}" *ngFor="let c of countrys">{{ c.name }} (+{{ c.code }})</ion-select-option>
+</ion-select>
+</ion-col>
+<ion-col size="6"><ion-input type="tel" [(ngModel)]="phone" maxlength="12" minlength="9" name="phone" required placeholder="{{ text.signup_phone }}"></ion-input></ion-col>
+</ion-row>
+
+<ion-item lines="none">
+  <ion-label position="floating">{{ text.signup_email }}</ion-label>
+  <ion-input type="email" ngModel name="email" required></ion-input>
+</ion-item>
+
+<ion-item lines="none">
+  <ion-label position="floating">{{ text.rcode }}</ion-label>
+  <ion-input type="text" ngModel name="rcode"></ion-input>
+</ion-item>
+
+<ion-item lines="none">
+  <ion-label position="floating">{{ text.signup_password }}</ion-label>
+  <ion-input type="password" ngModel name="password" required></ion-input>
+</ion-item>
+
+<ion-item class="ion-text-wrap" class="noBorder" lines="none">
+    <ion-label>{{ text.i_agree }} <a href="{{ setting.term }}" target="_blank">{{ text.terms }}</a></ion-label>
+    <ion-checkbox slot="start" (ionChange)="term()"></ion-checkbox>
+  </ion-item>
+
+<ion-button expand="block" mode="ios" type="submit" [disabled]="!form.valid || !hasTerm">{{ text.signup_btn }}</ion-button>
+
+</form>
+</span>
+
+<span *ngIf="otp">
+<h1 align="center" *ngIf="setting.verify_type == 3">{{ text.verify_your_email }}</h1>
+<h1 align="center" *ngIf="setting.verify_type != 3">{{ text.verify_your_phone }}</h1>
+<p align="center">{{ text.verify_code_sent }} {{ codeSent }}</p>
+<br>
+
+<form #form="ngForm" (ngSubmit)="verify(form.value)">
+
+<ion-item lines="none">
+  <ion-label position="floating">{{ text.enter_otp }}</ion-label>
+  <ion-input type="tel" ngModel name="vcode" required></ion-input>
+</ion-item>
+
+<ion-button expand="block" mode="ios" type="submit" style="margin-top: 20px;">{{ text.verify }}</ion-button>
+
+
+</form>
+</span>
+
+</ion-content>

@@ -1,0 +1,40 @@
+<ion-header class="ion-no-border">
+<ion-toolbar color="light">
+<ion-buttons slot="start">
+<ion-back-button></ion-back-button>
+</ion-buttons>
+<ion-title>Add New Address</ion-title>
+</ion-toolbar>
+</ion-header>
+ 
+<ion-content *ngIf="text">
+
+<ion-searchbar [(ngModel)]="autocomplete.input" (ionInput)="UpdateSearchResults()" placeholder="Search for a place"  (ionClear)="ClearAutocomplete()" mode="ios" color="light"></ion-searchbar>
+
+<ion-list [hidden]="autocompleteItems.length == 0">
+    <ion-item *ngFor="let item of autocompleteItems" tappable (click)="SelectSearchResult(item)">
+      {{ item.description }}
+    </ion-item>
+  </ion-list>
+
+<div class="map-wrapper">
+<div id="map_center">
+<ion-icon name="pin" color="primary" style="font-size: 30px;"></ion-icon>
+</div>
+<div #map id="map"></div>
+</div>
+
+<form #form="ngForm" (ngSubmit)="saveAddress(form.value)" class="ion-padding">
+
+<ion-item lines="none">
+  <ion-label position="floating">Address</ion-label>
+  <ion-textarea [(ngModel)]="address" name="address" required></ion-textarea>
+</ion-item>
+
+<ion-item lines="none">
+  <ion-label position="floating">Any Near Landmark</ion-label>
+  <ion-input [(ngModel)]="landmark" name="landmark"></ion-input>
+</ion-item>
+
+<ion-button expand="block" mode="ios" type="submit" [disabled]="!form.valid">Save</ion-button>
+</form>

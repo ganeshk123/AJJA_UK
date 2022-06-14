@@ -1,0 +1,14 @@
+<ion-content class="ion-padding" *ngIf="text">
+
+<p>{{ text.select_tip }}</p>
+<div *ngIf="tips && tips.length > 0" class="tipBox">
+<p></p>
+<div style="width: 350px;margin-top: -12px;">
+  <div class="horizontal-scrollable year-list">
+    <a class="year-tag" (click)="applyNow(t)" *ngFor="let t of tips">{{ setting.currency }}{{ t }}</a>
+    <div class="year-tag" style="opacity: 0; padding: 4px;"></div>
+  </div>
+</div>
+</div>
+
+</ion-content>

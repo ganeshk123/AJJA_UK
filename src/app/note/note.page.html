@@ -1,0 +1,10 @@
+<ion-content class="ion-padding" *ngIf="text">
+
+<ion-item lines="none">
+  <ion-label position="floating" style="font-size:12px">{{ text.write_note }}</ion-label>
+  <ion-input type="text" required name="notes" [(ngModel)]="notes"></ion-input>
+</ion-item>
+<br>
+<ion-button expand="block" mode="ios" (click)="saveData()">{{ text.conti }}</ion-button>
+
+</ion-content>

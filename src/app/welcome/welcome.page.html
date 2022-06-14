@@ -1,0 +1,27 @@
+<ion-header class="ion-no-border">
+<ion-toolbar>
+</ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen class="ion-padding" scroll-y="false" *ngIf="data">
+<ion-slides pager="true">
+
+<ion-slide *ngFor="let slider of data;let i = index">
+<div class="slide">
+<img src="{{ slider.img }}" />
+<h1 *ngIf="slider.title">{{ slider.title }}</h1>
+<p *ngIf="slider.text">{{ slider.text }}</p>
+<div *ngIf="i == (data.length - 1)" style="margin-top: 5%;">
+
+<div class="ion-padding">
+<ion-button color="primary" mode="ios" size="medium" expand="block" routDirection="forward" routerLink="/lang">Get Started &nbsp;<ion-icon name="chevron-forward-circle-outline"></ion-icon></ion-button>
+</div>
+</div>
+
+</div>
+</ion-slide>
+
+
+
+</ion-slides>
+</ion-content>

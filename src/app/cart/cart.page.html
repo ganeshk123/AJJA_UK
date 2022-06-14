@@ -1,0 +1,101 @@
+<ion-header class="ion-no-border">
+<ion-toolbar>
+<ion-buttons slot="start">
+<ion-back-button></ion-back-button>
+<ion-title *ngIf="text">{{ text.cart_title }}</ion-title>
+</ion-buttons>
+</ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="data && text">
+<!--Empty card-->
+<div *ngIf="data && data.data.length == 0" class="ion-padding">
+	
+<img src="assets/e.png">
+
+<p align="center" style="color:gray">{{ text.empty }}</p>
+
+<ion-button mode="ios" expand="block" style="margin-top:10%;width: 90%;margin:auto;margin-top: 10%" routerLink="/home" routerDirection="root">{{ text.start_shopping }}</ion-button>
+
+</div>
+<!--empty card end-->
+
+<div *ngIf="data && data.data.length > 0" style="background:#f4f5f8">
+<ion-row *ngFor="let item of data.data" style="padding: 10px 10px;background: white;margin-bottom: 6px;">
+<ion-col size="5"><img src="{{ item.img }}" style="border-radius: 10px" *ngIf="item.img"></ion-col>
+<ion-col size="7">
+
+<ion-row>
+<ion-col size="12">{{ item.item }}
+<br><small>{{ text.cart_price }} : {{ data.currency }}{{ item.price }} | {{ text.cart_qty }} : {{ item.qty }} {{ item.qtyName }}</small>
+
+<span *ngIf="item.addon.length > 0">
+
+<small *ngFor="let addon of item.addon"><br>{{ addon.name }} - {{ data.currency }}{{ addon.price }}</small>	
+
+</span>
+<br>
+<ion-icon name="remove-circle-outline" style="font-size: 26px" color="danger" (click)="updateCart(item.id,0)"></ion-icon>
+<ion-icon name="add-circle-outline" style="font-size: 26px;margin-left: 15px;margin-top: 10px" color="success" (click)="updateCart(item.id,1)"></ion-icon>
+</ion-col>
+</ion-row>
+
+</ion-col>
+</ion-row>
+
+<p style="font-size:11px" align="center" (click)="writeNote()">{{ text.cooking_notes }}</p>
+
+<p style="font-size:11px;border-top:1px dotted black;width:96%;margin:auto;padding: 0px 10px" align="center" *ngIf="notes">{{ notes }} <a (click)="removeNotes()" style="color:red;float: right;">{{ text.clear }}</a></p>
+
+<ion-item *ngIf="data.discount == 0" (click)="coupen()" lines="none" detail style="margin-top: 10px;">
+  <ion-label>
+   {{ text.have_discount }}
+  </ion-label>
+  <ion-icon name="pricetags-outline" slot="start" color="primary"></ion-icon>
+</ion-item>
+
+<ion-list style="margin-top: 10px;">
+
+<ion-item lines="full">
+  <ion-label style="font-size: 14px">{{ text.sub_total }} <span style="float: right">{{ data.currency }}{{ data.item_total }}</span></ion-label>
+</ion-item>
+
+<ion-item lines="full" *ngIf="data.discount > 0">
+  <ion-label style="font-size: 14px">{{ text.discount }} <span style="float: right">{{ data.currency }}{{ data.discount }}
+  <br>
+  <a (click)="removeOffer(data.hasOffer.id)" style="float: right;font-size: 12px;color:red">{{ text.remove }}</a>
+
+  </span></ion-label>
+</ion-item>
+
+<ion-item lines="full" *ngIf="data.discount == 0 && data.hasOffer && data.hasOffer.id">
+  <ion-label style="font-size: 14px">{{ text.offer_applied }} ({{ data.hasOffer.code }}) 
+  <br><small style="color:red">{{ data.currency }}{{ data.hasOffer.amount }} {{ text.cashback_msg }}</small>
+
+ <a (click)="removeOffer(data.hasOffer.id)" style="float: right;font-size: 12px;color:red">{{ text.remove }}</a>
+
+</ion-label>
+</ion-item>
+
+<ion-item lines="full" *ngIf="data.tax_value > 0">
+  <ion-label style="font-size: 14px">{{ data.tax_name }} <span style="float: right">{{ data.currency }}{{ data.tax_value }}</span></ion-label>
+</ion-item>
+
+
+
+<ion-item lines="full" *ngIf="data.d_charges > 0">
+  <ion-label style="font-size: 14px">{{ text.d_charges }} <span style="float: right">{{ data.currency }}{{ data.d_charges }}</span></ion-label>
+</ion-item>
+
+<ion-item lines="none">
+  <ion-label style="font-size: 14px">{{ text.total_payable }} <span style="float: right">{{ data.currency }}{{ data.total }}</span></ion-label>
+</ion-item>
+</ion-list>
+</div>
+
+
+<div class="ion-padding" *ngIf="data && data.data.length > 0" style="margin-top:-4%">
+<ion-button mode="ios" expand="block" (click)="checkout()">{{ text.checkout }}</ion-button>
+</div>
+
+</ion-content>

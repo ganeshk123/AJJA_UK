@@ -1,0 +1,116 @@
+<ion-content class="ion-padding" *ngIf="text" #content>
+
+<a (click)="closeModal()" style="float:right">{{ text.close }}</a>
+<br>
+
+<h2 style="margin-bottom: 22px">{{ text.payment_method }} <span class="amount storeName"> {{ setting.currency }}{{ total }}</span></h2>
+
+<ion-item lines="none">
+<ion-label style="font-size: 13px">{{ text.ecash_desc }} <span style="float: right;font-size: 13px">{{ wallet }}</span>
+</ion-label>
+<ion-checkbox slot="start" mode="ios" (click)="useEcash()"></ion-checkbox>
+</ion-item>
+
+<ion-row (click)="setPayment(1)" *ngIf="setting.cod == 0">
+<ion-col size="3"><img src="assets/pay_cod.png"></ion-col>
+<ion-col size="9" style="margin-top: 13px;" class="storeName">{{ text.cod }}
+<ion-icon name="checkmark-circle" style="float: right;font-size: 25px;" color="primary" *ngIf="payment == 1"></ion-icon>
+</ion-col>
+</ion-row>
+
+
+<ion-row (click)="setPayment(2)" *ngIf="setting.stripe_key">
+<ion-col size="3"><img src="assets/pay_stripe.png"></ion-col>
+<ion-col size="9" style="margin-top: 13px;" class="storeName">{{ text.stripe }}
+<ion-icon name="checkmark-circle" style="float: right;font-size: 25px;" color="primary" *ngIf="payment == 2"></ion-icon>
+</ion-col>
+</ion-row>
+
+<ion-row (click)="setPayment(3)" *ngIf="setting.razor_key">
+<ion-col size="3"><img src="assets/pay_upi.png"></ion-col>
+<ion-col size="9" style="margin-top: 13px;" class="storeName">{{ text.razor }}
+<ion-icon name="checkmark-circle" style="float: right;font-size: 25px;" color="primary" *ngIf="payment == 3"></ion-icon>
+</ion-col>
+</ion-row>
+
+<ion-row (click)="setPayment(4)" *ngIf="setting.paypal_id">
+<ion-col size="3"><img src="assets/pay_paypal.png"></ion-col>
+<ion-col size="9" style="margin-top: 13px;" class="storeName">{{ text.pay_paypal }}
+<ion-icon name="checkmark-circle" style="float: right;font-size: 25px;" color="primary" *ngIf="payment == 4"></ion-icon>
+</ion-col>
+</ion-row>
+
+<ion-row (click)="setPayment(5)" *ngIf="setting.paystack_id">
+<ion-col size="3"><img src="assets/ps.png"></ion-col>
+<ion-col size="9" style="margin-top: 13px;" class="storeName">{{ text.pay_paystack }}
+<ion-icon name="checkmark-circle" style="float: right;font-size: 25px;" color="primary" *ngIf="payment == 5"></ion-icon>
+</ion-col>
+</ion-row>
+
+<ion-row (click)="setPayment(6)" *ngIf="setting.stripe_key">
+<ion-col size="3"><img src="assets/pay_stripe.png"></ion-col>
+<ion-col size="9" style="margin-top: 13px;" class="storeName">Pay with Stripe Giropay
+<ion-icon name="checkmark-circle" style="float: right;font-size: 25px;" color="primary" *ngIf="payment == 6"></ion-icon>
+</ion-col>
+</ion-row>
+
+<ion-row (click)="setPayment(7)" *ngIf="setting.stripe_key">
+<ion-col size="3"><img src="assets/pay_stripe.png"></ion-col>
+<ion-col size="9" style="margin-top: 13px;" class="storeName"> Pay with ideal
+<ion-icon name="checkmark-circle" style="float: right;font-size: 25px;" color="primary" *ngIf="payment == 7"></ion-icon>
+</ion-col>
+</ion-row>
+
+<ion-row *ngIf="stripeView">
+<ion-col size="12"><p>{{ text.stripe_title }}</p></ion-col>
+
+<ion-col size="12">
+<ion-item lines="none">
+  <ion-input type="tel" [(ngModel)]="card_no" name="card_no" maxlength="16" placeholder="{{ text.card_no }}"></ion-input>
+</ion-item>
+</ion-col>
+
+<ion-col size="6">
+<ion-row class="brdr">
+<ion-col size="12">
+<ion-select placeholder="{{ text.exp_month }}" [(ngModel)]="exp_month" name="exp_month" required interface="action-sheet" mode="md">
+<ion-select-option value="01">01</ion-select-option>
+<ion-select-option value="02">02</ion-select-option>
+<ion-select-option value="03">03</ion-select-option>
+<ion-select-option value="04">04</ion-select-option>
+<ion-select-option value="05">05</ion-select-option>
+<ion-select-option value="06">06</ion-select-option>
+<ion-select-option value="07">07</ion-select-option>
+<ion-select-option value="08">08</ion-select-option>
+<ion-select-option value="09">09</ion-select-option>
+<ion-select-option value="10">10</ion-select-option>
+<ion-select-option value="11">11</ion-select-option>
+<ion-select-option value="12">12</ion-select-option>
+</ion-select>
+</ion-col>
+</ion-row>
+
+</ion-col>
+
+<ion-col size="6">
+<ion-row class="brdr">
+<ion-col size="12">
+<ion-select placeholder="{{ text.exp_year }}" [(ngModel)]="exp_year" name="exp_year" required interface="action-sheet" mode="md">
+<ion-select-option value="{{ y }}" *ngFor="let y of years">{{ y }}</ion-select-option>
+</ion-select>
+</ion-col>
+</ion-row>
+
+</ion-col>
+
+<ion-col size="6" style="margin-bottom: 10px;">
+<ion-item lines="none">
+  <ion-input type="tel" [(ngModel)]="cvv" name="cvv" placeholder="{{ text.cvv }}" maxlength="3"></ion-input>
+</ion-item>
+</ion-col>
+</ion-row>
+
+<br>
+<ion-button mode="ios" expand="block" *ngIf="allSet()" (click)="applyNow()">{{ text.conti }}</ion-button>
+
+</ion-content>

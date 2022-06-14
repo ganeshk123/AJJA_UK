@@ -1,0 +1,99 @@
+<ion-header class="ion-no-border">
+<ion-toolbar>
+<ion-buttons slot="start">
+<ion-back-button></ion-back-button>
+<ion-title *ngIf="text">{{ text.checkout }}</ion-title>
+</ion-buttons>
+</ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="data && text" #content>
+
+<div class="ion-padding" style="background-color: white;">
+<ion-list>
+  <ion-radio-group value="0" [(ngModel)]="otype" name="otype">
+    
+   <ion-item lines="none">
+    <ion-label style="font-size: 14px">{{ text.order_type }}</ion-label>
+    <ion-select placeholder="{{ text.delivery }}" name="otype" [(ngModel)]="otype">
+      <ion-select-option value="1">{{ text.delivery }}</ion-select-option>
+      <ion-select-option value="2">{{ text.pickup }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <br>
+
+  <ion-item lines="none">
+    <ion-label style="font-size: 14px">{{ text.order_date_time }}</ion-label>
+    <ion-select placeholder="{{ text.deliver_today }}" name="odate" [(ngModel)]="odate">
+      <ion-select-option value="1">{{ text.deliver_today }}</ion-select-option>
+      <ion-select-option value="2">{{ text.deliver_later }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <span *ngIf="odate == 2">
+  <br>
+  <ion-item lines="none" *ngIf="dates">
+    <ion-label style="font-size: 14px">{{ text.order_date_time }}</ion-label>
+    <ion-select placeholder="{{ text.select }}" [(ngModel)]="order_date" name="order_date" interface="popover" mode="ios">
+      <ion-select-option value="{{ d }}" *ngFor="let d of dates">{{ d }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <br>
+  <ion-item lines="none" *ngIf="times">
+    <ion-label style="font-size: 14px">{{ text.select_time }}</ion-label>
+    <ion-select placeholder="{{ text.select }}" [(ngModel)]="order_time" name="order_time" interface="popover" mode="ios">
+      <ion-select-option value="{{ t }}" *ngFor="let t of times">{{ t }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+</span>
+  
+  </ion-radio-group>
+</ion-list>
+</div>
+
+<div class="ion-padding" style="background-color:white;margin-top:10px" *ngIf="otype == 1">
+<ion-item (click)="addTip()" lines="none" detail>
+  <ion-label style="font-size: 14px;">
+   {{ text.add_tip }}
+  </ion-label>
+  <ion-icon name="cash-outline" slot="start" color="primary"></ion-icon>
+</ion-item>
+
+<small *ngIf="tip" style="margin-top: 10px;margin-left: 10px"><br>{{ setting.currency }}{{ tip }} {{ text.tip_added }} <a style="float:right" (click)="removeTip()">{{ text.clear }}</a></small>
+
+</div>
+
+<div class="ion-padding" style="background-color:white;margin-top:10px">
+<h2>{{ text.address_payment }}</h2>
+<span *ngIf="otype == 1">
+<div class="address" (click)="getAddress()">
+<p style="padding: 0px 10px">{{ text.persoanl_info }} <ion-icon name="caret-down-circle-outline" style="float: right;margin-top: 4px;"></ion-icon></p>
+
+<small *ngIf="addressName" style="display:block;padding: 0px 10px;margin-top: -10px;margin-bottom: 5px">{{ addressName }}</small>
+
+</div>
+</span>
+<br>
+<div class="address">
+<p style="padding: 0px 10px" (click)="getPaymentMethod()">{{ text.payment_method }} <span style="font-size:16px;float: right"><ion-badge>{{ setting.currency }}{{ getTotal() }}</ion-badge></span></p>
+
+<small *ngIf="payment && payment == 1" class="shwPayment">{{ text.cod }}</small>
+<small *ngIf="payment && payment == 2" class="shwPayment">{{ text.stripe }}</small>
+<small *ngIf="payment && payment == 3" class="shwPayment">{{ text.razor }}</small>
+<small *ngIf="payment && payment == 4" class="shwPayment">{{ text.pay_paypal }}</small>
+<small *ngIf="payment && payment == 5" class="shwPayment">{{ text.pay_paystack }}</small>
+<small *ngIf="payment && payment == 6" class="shwPayment">Stripe Giropay</small>
+<small *ngIf="payment && payment == 7" class="shwPayment">Stripe Ideal</small>
+<small *ngIf="!payment && hasEcash" class="shwPayment">{{ text.ecash }}</small>
+
+
+</div>
+
+
+
+<br>
+<ion-button mode="ios" expand="block" [disabled]="!allSet()" (click)="makeOrder()">{{ text.book_now }}</ion-button>
+</div>
+
+</ion-content>

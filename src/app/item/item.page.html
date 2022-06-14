@@ -1,0 +1,234 @@
+<ion-header class="ion-no-border">
+<ion-toolbar>
+<ion-buttons slot="start">
+<ion-back-button></ion-back-button>
+</ion-buttons>
+
+<ion-buttons slot="end" *ngIf="text">
+<ion-button mode="ios" color="dark" (click)="info()"><ion-icon name="arrow-redo-outline"></ion-icon> &nbsp;{{ text.view_info }}</ion-button>
+</ion-buttons>
+
+</ion-toolbar>
+</ion-header>
+
+<ion-content>
+<!--Display loading-->
+<ion-list id="skeleton" *ngIf="!data">
+<ion-list-header>
+<ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+</ion-list-header>
+
+<ion-item *ngFor="let fake of fakeData">
+<ion-thumbnail slot="start">
+<ion-skeleton-text></ion-skeleton-text>
+</ion-thumbnail>
+<ion-label>
+<h3>
+<ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+</h3>
+<p>
+<ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+</p>
+<p>
+<ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+</p>
+</ion-label>
+</ion-item>
+
+</ion-list>
+
+ <ion-fab horizontal="center" vertical="bottom" slot="fixed" *ngIf="count > 0" routerLink="/cart"
+        routerDirection="forward">
+        <ion-fab-button color="primary" edge="true">
+            <ion-icon name="cart"></ion-icon> {{ count }}
+        </ion-fab-button>
+    </ion-fab>
+
+<!--Main content start here-->
+<div *ngIf="data && text" style="margin-top:-5%">
+<ion-row style="padding: 0px 10px;">
+
+<ion-col size="12">
+<h1>{{ data.store.name }}</h1>
+</ion-col>
+<ion-col size="12" style="margin-top: -5px"><small><ion-icon name="bookmark-outline" color="primary"></ion-icon> {{ data.store.cates }}</small> 
+
+<ion-badge *ngIf="data.store.rating > 0" style="float: right">{{ data.store.rating }} <ion-icon name="star"></ion-icon></ion-badge>
+
+</ion-col>
+
+<ion-col size="12" style="margin-top: -5px"><small><ion-icon name="location-outline" color="primary"></ion-icon> {{ data.store.address }}</small>
+</ion-col>
+
+<ion-col size="4" *ngIf="type == 0" style="margin-top: -5px"><small><ion-icon name="alarm-outline" color="primary"></ion-icon> {{ data.store.dtime }}</small></ion-col>
+<ion-col size="8" *ngIf="type == 0" style="margin-top: -5px"><small><ion-icon name="wallet-outline" color="primary"></ion-icon> {{ text.avg_per }} {{ setting.currency }}{{ data.store.per_person }} </small></ion-col>
+
+<ion-col size="12" *ngIf="type == 1">
+
+<ion-row style="background: #fbfbfb;padding:10px 10px">
+<ion-col size="12"><b><ion-icon name="location-outline"></ion-icon> {{ text.location_title }} <span style="float:right"><a style="font-size:12px" href="http://maps.google.com/?q={{ data.store.lat }},{{ data.store.lng }}" target="_blank">{{ text.direction }}</a></span></b><br>
+
+<span style="font-size:12px;margin-left: 20px;margin-top: 8px">{{ data.store.address }}</span>
+
+</ion-col>
+</ion-row>
+
+<ion-row style="background: #fbfbfb;padding:10px 10px;margin-top:10px">
+<ion-col size="12"><b><ion-icon name="call-outline"></ion-icon> {{ text.contact_no }} <span style="float:right"><a style="font-size:12px" href="tel:{{ data.store.phone }}" target="_blank">{{ text.call_now }}</a></span></b><br>
+
+<span style="font-size:12px;margin-left: 20px;margin-top: 8px">{{ data.store.phone }}</span>
+
+</ion-col>
+</ion-row>
+
+<ion-row style="background: #fbfbfb;padding:10px 10px;margin-top:10px">
+<ion-col size="12"><b><ion-icon name="time-outline"></ion-icon> {{ text.timing }}</b>
+<br>
+<span style="font-size:12px;margin-left: 20px;margin-top: 8px">{{ data.store.today_open }} - {{ data.store.today_close }}</span>
+
+</ion-col>
+</ion-row>
+
+<ion-row style="background: #fbfbfb;padding:10px 10px;margin-top:10px">
+<ion-col size="12"><b><ion-icon name="cash-outline"></ion-icon> {{ text.avg_per }}</b>
+<br>
+<span style="font-size:12px;margin-left: 20px;margin-top: 8px">{{ setting.currency }}{{ data.store.per_person }}</span>
+
+</ion-col>
+</ion-row>
+
+<ion-row style="background: #fbfbfb;padding:10px 10px;margin-top:10px">
+<ion-col size="12"><b><ion-icon name="document-outline"></ion-icon> {{ text.view_menu }}</b></ion-col>
+
+<ion-col size="6" *ngFor="let m of data.store.menu"><img src="{{ m }}" (click)="viewImg(m,1)"></ion-col>
+
+
+</ion-row>
+
+
+</ion-col>
+
+</ion-row>
+
+<ion-searchbar mode="ios" [(ngModel)]="q" *ngIf="type == 0"></ion-searchbar>
+
+<!--if store type is delivery-->
+<span *ngIf="type == 0">
+<!--Category display-->
+<ion-segment [(ngModel)]="cate_id" scrollable style="background-color: #f4f5f8" mode="md">
+<ion-segment-button value="0" mode="md">
+{{ text.all }}
+</ion-segment-button>
+
+<ion-segment-button value="{{ cate.id }}" *ngFor="let cate of data.cate" mode="md">
+{{ cate.name }}
+</ion-segment-button>
+
+</ion-segment>
+
+<div [ngSwitch]="cate_id">
+
+<!--All items-->
+<div *ngSwitchCase="0" style="background-color: #f4f5f8">
+
+<ion-row *ngFor="let item of items | filter:q" style="padding: 5px 10px;background-color: white;margin-bottom: 2%">
+<ion-col size="5"><img src="{{ item.img }}" style="border-radius: 10px" *ngIf="item.img" (click)="viewImg(item.img)"> 
+
+<ion-badge style="position: absolute;z-index: 99;top:0px;left:0px" *ngIf="!item.stock" color="danger">{{ text.out_stock }}</ion-badge>
+
+</ion-col>
+<ion-col size="7">
+
+<ion-row>
+<ion-col size="12">{{ item.name }}<br><small style="color:gray">{{ item.desc }}</small></ion-col>
+<ion-col size="6">
+<span style="color:#228b88;font-weight: bold">
+
+<s *ngIf="item.mrp > 0" style="color:#ff9800">{{ setting.currency }}{{ item.mrp }}</s>
+
+{{ setting.currency }}{{ item.price }}</span>
+</ion-col>
+<ion-col size="6" style="text-align: right;font-size: 25px" *ngIf="item.stock">
+
+<span *ngIf="!hasCart(item.id)">
+<small class="add" *ngIf="item.count == 1 && item.addon.length == 0" (click)="addToCart(item.id,item.price,0)">+ Add</small>
+<small class="add" *ngIf="item.count > 1 || item.addon.length > 0" (click)="showOption(item)">+ Add</small>
+</span>
+
+<div class="quantitybtn" *ngIf="hasCart(item.id)">
+
+<button type="button" class="sign plus" data-quantity="plus" data-field="quantity" (click)="updateCart(item.id)"> - </button>
+<input class="quantityinput" type="text" name="qty" value="{{ hasCart(item.id) }}" readonly="readonly">
+
+<button type="button" class="sign minus" data-quantity="minus" data-field="quantity" *ngIf="item.count == 1"
+(click)="addToCart(item.id,item.price,0)">+</button>
+
+<button type="button" class="sign minus" data-quantity="minus"
+data-field="quantity" *ngIf="item.count > 1"
+(click)="showOption(item)">+</button>
+
+</div>
+
+</ion-col>
+</ion-row>
+
+</ion-col>
+</ion-row>
+</div>
+
+<!--Cate items-->
+<span *ngFor="let c of data.cate">
+<div *ngSwitchCase="c.id" style="background-color: #f4f5f8">
+<span *ngFor="let item of items">
+
+<ion-row style="padding: 5px 10px;margin-bottom: 2%;background-color: white" *ngIf="item.cate_id == c.id">
+<ion-col size="5"><img src="{{ item.img }}" style="border-radius: 10px" *ngIf="item.img" (click)="viewImg(item.img)">
+
+<ion-badge style="position: absolute;z-index: 99;top:0px;left:0px" *ngIf="!item.stock" color="danger">{{ text.out_stock }}</ion-badge>
+
+</ion-col>
+<ion-col size="7">
+
+<ion-row>
+<ion-col size="12">{{ item.name }}<br><small style="color:gray">{{ item.desc }}</small></ion-col>
+<ion-col size="6"><span style="color:#228b88;font-weight: bold">
+<s *ngIf="item.mrp > 0" style="color:#ff9800">{{ setting.currency }}{{ item.mrp }}</s>
+{{ setting.currency }}{{ item.price }}</span></ion-col>
+<ion-col size="6" style="text-align: right;font-size: 25px" *ngIf="item.stock">
+
+<span *ngIf="!hasCart(item.id)">
+<small class="add" *ngIf="item.count == 1 && item.addon.length == 0" (click)="addToCart(item.id,item.price,0)">+ {{ text.add }}</small>
+<small class="add" *ngIf="item.count > 1 || item.addon.length > 0" (click)="showOption(item)">+ {{ text.add }}</small>
+</span>
+
+<div class="quantitybtn" *ngIf="hasCart(item.id)">
+
+<button type="button" class="sign plus" data-quantity="plus" data-field="quantity" (click)="updateCart(item.id)"> - </button>
+<input class="quantityinput" type="text" name="qty" value="{{ hasCart(item.id) }}" readonly="readonly">
+
+<button type="button" class="sign minus" data-quantity="minus" data-field="quantity" *ngIf="item.count == 1"
+(click)="addToCart(item.id,item.price,0)">+</button>
+
+<button type="button" class="sign minus" data-quantity="minus"
+data-field="quantity" *ngIf="item.count > 1"
+(click)="showOption(item)">+</button>
+
+</div>
+
+</ion-col>
+</ion-row>
+
+</ion-col>
+</ion-row>
+
+</span>
+</div>
+</span>
+</div>
+</span>
+
+
+<!--if Store type is dining-->
+
+</div>
+</ion-content>

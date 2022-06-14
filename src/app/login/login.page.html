@@ -1,0 +1,48 @@
+<ion-header class="ion-no-border">
+<ion-toolbar color="primary">
+<ion-buttons slot="start">
+<ion-back-button></ion-back-button>
+</ion-buttons>
+</ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="text && setting" scroll-y="false">
+
+<div style="background: #cb202d;height: 280px;">
+<br>
+<p align="center"><ion-icon name="lock-open-outline" style="font-size: 70px;" color="light"></ion-icon></p>
+<h1 align="center" style="color:white">Login</h1>
+</div>
+
+<div class="ion-padding" style="margin-top:-20%;background: white;border-top-right-radius: 8%;border-top-left-radius: 8%;">
+<br>
+<form #form="ngForm" (ngSubmit)="login(form.value)" class="ion-padding">
+
+<ion-item lines="none" *ngIf="setting.verify_type == 0 || setting.verify_type == 3">
+  <ion-label position="floating">{{ text.login_email }}</ion-label>
+  <ion-input type="email" [(ngModel)]="email" required name="email"></ion-input>
+</ion-item>
+
+<ion-item lines="none" *ngIf="setting.verify_type == 1 || setting.verify_type == 2">
+  <ion-label position="floating">{{ text.signup_phone }}</ion-label>
+  <ion-input type="tel" [(ngModel)]="phone" required name="phone"></ion-input>
+</ion-item>
+
+<ion-item lines="none">
+  <ion-label position="floating">{{ text.login_password }}</ion-label>
+  <ion-input type="password" [(ngModel)]="password" required name="password"></ion-input>
+</ion-item>
+<ion-button expand="block" mode="ios" type="submit" style="margin-top: 15px">{{ text.login_button }}</ion-button>
+<p align="center"><a routerLink="/forgot" routerDirection="forward">{{ text.forgot_pass }}</a></p>
+
+</form>
+</div>
+
+</ion-content>
+
+
+<ion-footer class="ion-no-border">
+<ion-toolbar>
+<p align="center">{{ text.dont_have }} <a routerLink="/signup" routerDirection="forward">{{ text.signup_now }}</a></p>
+</ion-toolbar>
+</ion-footer>

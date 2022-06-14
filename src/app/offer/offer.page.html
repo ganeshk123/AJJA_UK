@@ -1,0 +1,24 @@
+<ion-content *ngIf="data && text" class="ion-padding">
+
+<h1>{{ text.select_offer }}</h1>
+<br>
+<ion-list *ngIf="data.length > 0">
+
+  <ion-item *ngFor="let offer of data">
+    <ion-label>{{ offer.code }}<br><small style="font-size: 11px;color: gray">{{ offer.desc }}</small>
+
+    <ion-button size="small" shape="round" fill="outline" style="float: right;margin-top: -17px" (click)="applyNow(offer.id)">{{ text.apply }}</ion-button>
+
+    </ion-label>
+  </ion-item>
+  </ion-list>
+
+<p *ngIf="data.length == 0" style="text-align: center;padding: 10px 10px;font-size: 11px;color:gray;line-height: 2;margin-top: 25%">{{ text.no_offer }}</p>
+
+</ion-content>
+
+<ion-footer class="ion-no-border" *ngIf="data && text">
+<ion-toolbar color="medium">
+<ion-button mode="ios" expand="block" size="medium" (click)="closeModal()" style="width: 90%;margin-left: 5%;margin-bottom:15px">{{ text.close  }}</ion-button>
+</ion-toolbar>
+</ion-footer>

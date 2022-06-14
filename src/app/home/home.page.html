@@ -1,0 +1,167 @@
+<ion-header class="ion-no-border">
+<ion-toolbar>
+<ion-title *ngIf="address"><ion-icon name="location-outline"></ion-icon> {{ address }}</ion-title>
+
+<ion-buttons slot="end" (click)="showMenu()">
+<ion-icon name="menu-outline" style="font-size: 28px;"></ion-icon>
+</ion-buttons>
+
+</ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true" #content>
+
+<ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+<!--Display loading-->
+<ion-list id="skeleton" *ngIf="!data">
+<ion-list-header>
+<ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+</ion-list-header>
+
+<ion-item *ngFor="let fake of fakeData">
+<ion-thumbnail slot="start">
+<ion-skeleton-text></ion-skeleton-text>
+</ion-thumbnail>
+<ion-label>
+<h3>
+<ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+</h3>
+<p>
+<ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+</p>
+<p>
+<ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+</p>
+</ion-label>
+</ion-item>
+
+</ion-list>
+
+<!--Main content start here-->
+
+<span *ngIf="data && text">
+
+<div style="background-color:white">
+<ion-segment [(ngModel)]="store_type" (ionChange)="setType()" mode="ios" color="primary" style="margin: auto;width: 90%;">
+  <ion-segment-button value="0">
+    <ion-label>{{ text.delivery_title }}</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="1">
+    <ion-label>{{ text.dinein_title }}</ion-label>
+  </ion-segment-button>
+</ion-segment>
+
+<ion-searchbar mode="ios" style="margin-top: 5px;" (click)="search()" placeholder=" {{ text.search }}"></ion-searchbar>
+</div>
+
+<div class="ion-padding" style="background-color:white;margin-top:-4%;">
+<div style="width: 350px;margin-top: -12px;">
+  <div class="horizontal-scrollable year-list">
+    <a class="year-tag-clear" (click)="filterData(0)" *ngIf="filterPress"><ion-icon name="close-outline"></ion-icon> {{ text.clear }}</a>
+    <a [class]="filterPress == 1 ? 'year-tag-select' : 'year-tag'" (click)="filterData(1)"><ion-icon name="star-outline"></ion-icon> {{ text.rating }}</a>
+    <a [class]="filterPress == 2 ? 'year-tag-select' : 'year-tag'" (click)="filterData(2)"><ion-icon name="location-outline"></ion-icon> {{ text.nearest }}</a>
+    <a [class]="filterPress == 3 ? 'year-tag-select' : 'year-tag'" (click)="filterData(3)"><ion-icon name="checkmark-done-outline"></ion-icon> {{ text.new_arrival }}</a>
+    <a [class]="filterPress == 4 ? 'year-tag-select' : 'year-tag'" (click)="filterData(4)"><ion-icon name="rocket-outline"></ion-icon> {{ text.fast_delivery }}</a>
+    <div class="year-tag" style="opacity: 0; padding: 4px;"></div>
+  </div>
+</div>
+
+</div>
+
+<div style="width: 100%;padding: 5px 5px;background-color: white;margin-top: -8%;">
+<ion-slides [options]="BannerOption" #slideone autoplay="1000" style="margin-top: 15px;margin-bottom: 5px;" pager="true">
+<ion-slide *ngFor="let banner of data.slider" (click)="bannerLink(banner)">
+  
+<img src="{{ banner.img }}" style="border-radius: 10px;width: 94%;">
+
+</ion-slide>
+</ion-slides>
+
+<p style="padding:0px 10px">{{ text.choose_category }}</p>
+
+<ion-row style="text-align: center;">
+<ion-col *ngFor="let cate of data.category" size="3" (click)="cateData(cate)"><img src="{{ cate.img }}" style="width: 60px;border-radius: 10px;background-color:#f3f3f3;padding:10px 10px"><small style="font-size: 11px;display: block">{{ cate.name }}</small></ion-col>
+</ion-row>
+
+<br>
+</div>
+
+<div style="background-color:white;margin-top:7px" class="ion-padding">
+<h3 style="margin-top:-2%">{{ text.trend_in }} <a style="float:right;font-size:12px;margin-top:5px" (click)="viewAll()">{{ text.view_all }}</a></h3>
+
+<ion-slides pager="false" [options]="TrendOption" #slideone style="margin-top: -1%">
+<ion-slide *ngFor="let trend of data.trend" (click)="item(trend)">
+  
+<ion-row style="text-align: left;">
+<ion-col size="12"><img src="{{ trend.img }}" style="border-radius:5px">
+
+<span style="display:block;font-size: 13px">{{ trend.name }}</span>
+
+</ion-col>
+</ion-row>
+
+
+</ion-slide>
+</ion-slides>
+</div>
+
+<div style="background-color:white;margin-top: -9px;">
+
+<h3 style="padding: 15px 12px">{{ text.reco }} <a style="float:right;font-size:12px;margin-top:5px" (click)="viewAll()">{{ text.view_all }}</a></h3>
+
+<ion-row *ngFor="let random of data.random;let i = index" (click)="item(random)" style="padding: 10px 10px;margin-top: -22px;">
+
+<ion-col size="5"><img src="{{ random.img }}" style="border-radius:5px">
+<ion-badge style="position: absolute;z-index: 99;top:0px;left:0px" *ngIf="random.rating > 0">{{ random.rating }}</ion-badge>
+</ion-col>
+<ion-col size="7"><span class="storeName">{{ random.name }}</span>
+
+<span class="storeName" style="display:block;font-size: 11px;color:gray">{{ random.cates }}</span>
+<span class="storeName" style="display:block;font-size: 11px;color:black">{{ random.address }}</span>
+<span id="store" *ngIf="data.random.length > 3 && i == 2 || data.random.length < 4 && i == 1"></span>
+</ion-col>
+
+</ion-row>
+
+</div>
+
+<div style="background-color:white;margin-bottom:-5%;margin-top: -9px;">
+<h3 style="padding: 10px 15px">{{ storeData.length }} {{ text.store_around }}  <ion-icon name="filter-outline" *ngIf="!cate_id || cate_id == 0" style="float: right;" (click)="presentActionSheet()"></ion-icon>
+
+<small *ngIf="cate_id" style="font-size:12px;margin-top:7px;display: block">{{ text.showing_category }} :  {{ cate_name }} <a style="float:right;color:red" (click)="clearCate()">{{ text.clear }}</a></small>
+<small *ngIf="filterPress" style="font-size:12px;margin-top:7px;display: block">{{ text.filter_by }} {{ filterName }}</small>
+
+</h3>
+
+</div>
+
+<ion-row *ngFor="let store of storeData" (click)="item(store)" style="background-color: white;padding: 0px 10px;margin-bottom: 3%">
+<ion-col size="12"><img src="{{ store.img }}" style="margin-top:5px;border-radius: 4px;"></ion-col>
+
+<ion-col size="12" style="font-size: 20px;" class="storeName">{{ store.name }} <ion-badge style="float: right;" *ngIf="store.rating > 0">{{ store.rating }}</ion-badge></ion-col>
+<ion-col size="12" style="font-size: 11px;margin-top: -8px;color:gray">{{ store.currency }}{{ store.price }} {{ text.per_person }} |  {{ store.dtime }}
+
+<span style="float:right;color:gray">{{ store.km }}{{ text.km }}</span>
+
+</ion-col>
+<ion-col size="12" *ngIf="!store.open"><small style="color:red">{{ text.store_close }}</small></ion-col>
+</ion-row>
+
+</span>
+</ion-content>
+
+<ion-footer class="ion-no-border" *ngIf="data && text">
+<ion-toolbar color="light">
+<ion-row style="text-align: center;">
+<ion-col size="4" (click)="loadData()"><ion-icon name="home-outline" color="primary"></ion-icon><small style="display:block;">{{ text.menu_home }}</small></ion-col>
+
+<ion-col size="4" routerLink="/cart" routerDirection="forward"><ion-icon name="bag-handle-outline"></ion-icon><small style="color:red;font-size: 12px" *ngIf="data.count > 0">{{ data.count }}</small><small style="display:block;">{{ text.footer_cart }}</small></ion-col>
+<ion-col size="4" (click)="account()"><ion-icon name="person-outline"></ion-icon><small style="display:block;">{{ text.footer_profile }}</small></ion-col>
+
+</ion-row>
+</ion-toolbar>
+</ion-footer>

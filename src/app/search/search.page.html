@@ -1,0 +1,109 @@
+<ion-header class="ion-no-border">
+<ion-toolbar>
+<ion-buttons slot="start">
+<ion-back-button></ion-back-button>
+</ion-buttons>
+</ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="text">
+
+<!--Display loading-->
+<ion-list id="skeleton" *ngIf="search">
+<ion-list-header>
+<ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+</ion-list-header>
+
+<ion-item *ngFor="let fake of fakeData">
+<ion-thumbnail slot="start">
+<ion-skeleton-text></ion-skeleton-text>
+</ion-thumbnail>
+<ion-label>
+<h3>
+<ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+</h3>
+<p>
+<ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+</p>
+<p>
+<ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+</p>
+</ion-label>
+</ion-item>
+
+</ion-list>
+
+<h1 style="padding: 10px 15px">{{ text.search }}</h1>
+
+<ion-searchbar mode="ios" [(ngModel)]="q" placeholder="{{ text.search_title }}" (ionChange)="save($event)"></ion-searchbar>
+
+<ion-list *ngIf="q && q.length > 2 && !data">
+<ion-list-header>{{ text.search_res }} <b>&nbsp;{{ q }}</b></ion-list-header>
+
+<ion-item *ngFor="let s of store | filter:q" detail (click)="searchPage(s)">
+<ion-thumbnail slot="start">
+    <img src="{{ s.img }}" style="border-radius: 6px">
+  </ion-thumbnail>
+<ion-label>{{ s.name }}</ion-label>
+</ion-item>
+
+</ion-list>
+
+<div style="background-color: #f4f5f8" *ngIf="data && data.length > 0">
+
+<h4 style="padding: 10px 10px">{{ text.all_store_deliver }} {{ searchQ }}</h4>
+
+<ion-row *ngFor="let store of data" (click)="item(store)" style="background-color: white;padding: 0px 10px;margin-bottom: 2%">
+<ion-col size="6"><img src="{{ store.img }}" style="border-radius: 10px">
+<ion-badge style="position: absolute;z-index: 99;top:0px;left:0px" *ngIf="store.rating > 0">{{ store.rating }} <ion-icon name="star"></ion-icon></ion-badge>
+</ion-col>
+
+<ion-col size="6">
+
+<ion-row>
+
+<ion-col size="12" style="color:black;font-weight: bold">{{ store.name }}</ion-col>
+<ion-col size="12" style="margin-top: -5%"><small style="color:#a9a9a9">{{ store.address }}</small></ion-col>
+<ion-col size="12" *ngIf="!store.open"><small style="color:red">{{ text.store_close }}</small></ion-col>
+
+</ion-row>
+
+</ion-col>
+</ion-row>
+</div>
+
+<div *ngIf="search_query && search_query.length > 0" class="ion-padding">
+
+<ion-list>
+<ion-list-header>
+  <ion-label>{{ text.recent_search_query }} <a style="float:right;font-size: 12px;" (click)="clearSearch()">{{ text.clear }}</a></ion-label>
+</ion-list-header>
+<ion-item detail routerDirection="forward" *ngFor="let t of search_query" (click)="search_again(t)">
+  <ion-label>
+  {{ t }}
+  </ion-label>
+  <ion-icon name="trending-up-outline" slot="start"></ion-icon>
+</ion-item>
+
+</ion-list>
+
+</div>
+
+<div *ngIf="search_query.length == 0 && trend && trend.length > 0" class="ion-padding">
+
+<ion-list>
+<ion-list-header>
+  <ion-label>{{ text.trend_search }}</ion-label>
+</ion-list-header>
+<ion-item detail routerDirection="forward" *ngFor="let t of trend" routerLink="/item/{{ t.id }}/0">
+  <ion-label>
+  {{ t.name }}
+  </ion-label>
+  <ion-icon name="trending-up-outline" slot="start"></ion-icon>
+</ion-item>
+
+</ion-list>
+
+</div>
+
+</ion-content>

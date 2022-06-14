@@ -1,0 +1,92 @@
+<ion-header class="ion-no-border">
+<ion-toolbar>
+<ion-buttons slot="start">
+<ion-back-button></ion-back-button>
+<ion-title *ngIf="text">{{ text.my }}</ion-title>
+</ion-buttons>
+</ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="text" #content class="ion-padding">
+
+<div class="ion-padding" *ngIf="data && data.length == 0">
+<img src="assets/cart.png">
+<p align="center">{{ text.no_order }}</p>
+</div>
+
+<span *ngIf="data && data.length > 0">
+
+<ion-row *ngFor="let order of data" class="head" (click)="show(order.id)">
+
+<ion-col size="6">{{ order.store }}<br>(#{{order.id }})</ion-col>
+<ion-col size="6">{{ order.date }}</ion-col>
+
+<ion-col size="12" class="order_detail" *ngIf="oid == order.id">
+<ion-row>
+
+<ion-col size="5"><b>{{ text.order_date }}</b></ion-col>
+<ion-col size="7">{{ order.date }}</ion-col>
+
+</ion-row>
+
+<ion-row>
+
+<ion-col size="5"><b>{{ text.status }}</b></ion-col>
+<ion-col size="7">{{ order.status }}</ion-col>
+
+</ion-row>
+
+<ion-row>
+
+<ion-col size="6"><b>{{ text.item }}</b></ion-col>
+<ion-col size="3"><b>{{ text.qty }}</b></ion-col>
+<ion-col size="3"><b>{{ text.price }}</b></ion-col>
+
+</ion-row>
+
+<span *ngFor="let item of order.items">
+<ion-row>
+
+<ion-col size="6">{{ item.type }} {{ item.item }}</ion-col>
+<ion-col size="3">{{ item.qty }}</ion-col>
+<ion-col size="3">{{ order.currency }}{{ item.price * item.qty }}</ion-col>
+</ion-row>
+
+
+<ion-row *ngFor="let addon of item.addon">
+
+<ion-col size="6">{{ addon.addon }}</ion-col>
+<ion-col size="3">{{ item.qty }}</ion-col>
+<ion-col size="3">{{ order.currency }}{{ addon.price  }}</ion-col>
+
+</ion-row>
+</span>
+
+<ion-row class="border">
+<ion-col size="9"><b>{{ text.d_charges }}</b></ion-col>
+<ion-col size="3">{{ order.currency }}{{ order.user.d_charges  }}</ion-col>
+</ion-row>
+
+<ion-row *ngIf="order.user.tax_value" class="border">
+<ion-col size="9"><b>{{ order.user.tax_name }}</b></ion-col>
+<ion-col size="3">{{ order.currency }}{{ order.user.tax_value }}</ion-col>
+</ion-row>
+
+<ion-row class="border">
+<ion-col size="9"><b>{{ text.total_payable }}</b></ion-col>
+<ion-col size="3">{{ order.currency }}{{ order.user.total }}</ion-col>
+</ion-row>
+
+<br>
+<ion-row>
+
+<ion-col size="6"><ion-button size="small" shape="round" fill="outline" *ngIf="order.st == 0 || order.st == 1 || order.st == 3" (click)="presentAlertConfirm(order.id)">{{ text.cancel_order }}</ion-button></ion-col>
+<ion-col size="6"><ion-button size="small" shape="round" fill="outline" *ngIf="order.st == 5 && order.hasRating == 0" routerLink="/rate/{{ order.id }}" routerDirection="forward">{{ text.rating_title }}</ion-button></ion-col>
+</ion-row>
+</ion-col>
+
+</ion-row>
+
+</span>
+
+</ion-content>

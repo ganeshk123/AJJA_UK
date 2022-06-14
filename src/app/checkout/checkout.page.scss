@@ -1,0 +1,55 @@
+
+ion-content
+{
+  --background: #f4f5f8;
+}
+
+.paymentIcon
+{
+	float: right;font-size: 28px;margin-top: -3%;
+}
+
+.activeCard
+{
+	background-color: var(--ion-color-primary);
+	color:white;
+}
+
+.non
+{
+	
+}
+
+.activeHeader
+{
+	color:white;
+}
+
+ion-item
+{
+  border: 1px solid #e1e0e0;
+  border-radius: 10px;
+}
+
+.address
+{
+	border:1px solid #e1e0e0;padding: 0px 10px;border-radius: 10px;
+}
+
+.shwPayment
+{
+	display:block;padding: 0px 10px;margin-top: -10px;margin-bottom: 5px;
+}
+
+.tipBox
+{
+	background-color: #f7f7f7;
+  padding: 10px 10px;
+  border-radius: 10px;
+}
+
+.tip small
+{
+	display: block;
+	margin-top: -5px;
+}

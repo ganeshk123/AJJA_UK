@@ -1,0 +1,84 @@
+<ion-content class="ion-padding" *ngIf="text">
+
+<ion-icon name="arrow-back-outline" style="font-size: 25px;" (click)="close()"></ion-icon>
+
+<div *ngIf="!user">
+<h3>{{ text.your_profile }}</h3>
+
+<p style="margin-top: -2%;color:gray">{{ text.menu_desc }}</p>
+
+<ion-button expand="block" fill="outline" mode="ios" routerLink="/login" routerDirection="forward" (click)="close()">{{ text.conti }}</ion-button>
+</div>
+
+<div *ngIf="user && user.id">
+<h3 style="margin-bottom: -1%">{{ user.name }} <a style="float:right;font-size:14px" routerLink="/account" routerDirection="forward" (click)="close()">{{ text.view_account }}</a></h3>
+<small style="color:gray">{{ user.email }}</small>
+
+</div>
+
+<br>
+
+<ion-list>
+<ion-list-header>
+  <ion-label style="font-size: 14px;color:gray">{{ text.menu_title }}</ion-label>
+</ion-list-header>
+
+<ion-item detail routerLink="/done" routerDirection="forward" (click)="close()">
+  <ion-label>
+   {{ text.running_order }}
+  </ion-label>
+  <ion-icon name="stats-chart-outline" slot="start"></ion-icon>
+</ion-item>
+
+<ion-item detail routerLink="/my" routerDirection="forward" (click)="close()">
+  <ion-label>
+   {{ text.menu_my }}
+  </ion-label>
+  <ion-icon name="cart-outline" slot="start"></ion-icon>
+</ion-item>
+
+<ion-item detail routerLink="/account" routerDirection="forward" (click)="close()">
+  <ion-label>
+  {{ text.menu_my_account }}
+  </ion-label>
+  <ion-icon name="person-outline" slot="start"></ion-icon>
+</ion-item>
+
+<ion-item detail routerLink="/lang" routerDirection="forward" (click)="close()">
+  <ion-label>
+   {{ text.lang_title }}
+  </ion-label>
+  <ion-icon name="flag-outline" slot="start"></ion-icon>
+</ion-item>
+
+<ion-item detail routerLink="/about" routerDirection="forward" (click)="close()">
+  <ion-label>
+   {{ text.menu_about }}
+  </ion-label>
+  <ion-icon name="information-circle-outline" slot="start"></ion-icon>
+</ion-item>
+
+<ion-item detail routerLink="/faq" routerDirection="forward"  (click)="close()">
+  <ion-label>
+  {{ text.menu_faq }}
+  </ion-label>
+  <ion-icon name="create-outline" slot="start"></ion-icon>
+</ion-item>
+
+<ion-item detail routerLink="/contact" routerDirection="forward" (click)="close()">
+  <ion-label>
+   {{ text.menu_contact }}
+  </ion-label>
+  <ion-icon name="mail-outline" slot="start"></ion-icon>
+</ion-item>
+
+<ion-item detail  lines="none" (click)="logout()">
+  <ion-label>
+   {{ text.logout }}
+  </ion-label>
+  <ion-icon name="log-out-outline" slot="start"></ion-icon>
+</ion-item>
+
+</ion-list>
+
+</ion-content>
